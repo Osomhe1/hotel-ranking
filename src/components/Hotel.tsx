@@ -84,13 +84,13 @@ const Hotel: React.FC = () => {
       setFilteredHotels((prev) => [...prev, ...hotelData])
 
       if (pageNumber === 0) {
-        // For the first page, extract unique brands and locations for filtering
-        const uniqueBrands = Array.from(
-          new Set(hotelData.map((hotel: { brand: any }) => hotel.brand))
-        )
         const uniqueLocations = Array.from(
           new Set(hotelData.map((hotel: { city: any }) => hotel.city))
-        )
+        ) as string[]
+        const uniqueBrands = Array.from(
+          new Set(hotelData.map((hotel: { brand: any }) => hotel.brand))
+        ) as string[]
+
         setBrands(uniqueBrands)
         setLocations(uniqueLocations)
       }
@@ -192,18 +192,29 @@ const Hotel: React.FC = () => {
   )
 
   useEffect(() => {
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          console.log('Element is in view:', entry.target)
+          // You can trigger any function or state change here when the element is in view
+        }
+      })
+    }
+
     if (observerRef.current) {
       const observer = new IntersectionObserver(observerCallback, {
         root: null,
         rootMargin: '200px',
         threshold: 0.1,
       })
+
       observer.observe(observerRef.current)
+
       return () => {
         if (observerRef.current) observer.unobserve(observerRef.current)
       }
     }
-  }, [observerCallback])
+  }, [])
 
   useEffect(() => {
     if (page > 0) fetchHotels(page)
