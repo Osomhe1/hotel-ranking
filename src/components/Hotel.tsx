@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState, useRef } from 'react'
 import api from '../hooks/api'
@@ -28,7 +27,7 @@ const Hotel: React.FC = () => {
   const [selectedBrand, setSelectedBrand] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('')
   const [loading, setLoading] = useState(true)
-  const [page, setPage] = useState(0) // Track the current page number
+  const [page] = useState(0) // Track the current page number
   const [isFetchingMore, setIsFetchingMore] = useState(false) // Track if we are fetching more hotels
 
   // Reference for the observer element (used for infinite scroll)
