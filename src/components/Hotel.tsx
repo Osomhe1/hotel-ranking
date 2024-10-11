@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import api from '../hooks/api'
 import HotelList from './HotelList'
 import Loader from './Loader'
@@ -173,34 +174,14 @@ const Hotel: React.FC = () => {
     setFilteredHotels(sortedHotels)
   }
 
-  // Infinite scroll logic using IntersectionObserver
-  const observerCallback = useCallback(
-    (entries: [any]) => {
-      const [entry] = entries
-      if (entry.isIntersecting && !isFetchingMore) {
-        setIsFetchingMore(true)
-        setPage((prevPage) => prevPage + 1) // Increment page number
-        if (entry.target) {
-          entry.target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-          })
-        }
+  const observerCallback = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        console.log('Element is in view:', entry.target)
       }
-    },
-    [isFetchingMore]
-  )
-
+    })
+  }
   useEffect(() => {
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          console.log('Element is in view:', entry.target)
-          // You can trigger any function or state change here when the element is in view
-        }
-      })
-    }
-
     if (observerRef.current) {
       const observer = new IntersectionObserver(observerCallback, {
         root: null,
